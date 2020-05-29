@@ -1,0 +1,53 @@
+#!/usr/bin/python3
+
+from pathlib import Path
+import os
+import subprocess
+
+
+def find_vfile() -> Path:
+    '''
+    Find the VERSION file
+    '''
+    p = Path('.').absolute()
+
+    while p != Path('/'):
+        if 'VERSION' in os.listdir(p):
+            return (p / 'VERSION').resolve()
+        p = p.parent
+    raise Exception('Unable to find a VERSION file')
+
+
+def bump_file(vfile: Path) -> None:
+    '''
+    Read the version from the file
+    bump the last component
+    save
+
+    it presumes a file containing
+    x.x.x\n
+    and nothing else
+    '''
+    items = vfile.read_text().strip().split('.')
+    items.append(str(int(items.pop()) + 1))
+    vfile.write_text('.'.join(items) + '\n')
+
+
+def commit_bump(vfile: Path) -> None:
+    cmdline = [
+        'git',
+        'commit',
+        '-m', 'Bump version',
+        vfile,
+    ]
+    subprocess.check_call(cmdline)  # type: ignore
+
+
+def main() -> None:
+    vfile = find_vfile()
+    bump_file(vfile)
+    commit_bump(vfile)
+
+
+if __name__ == '__main__':
+    main()
