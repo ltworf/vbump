@@ -1,0 +1,15 @@
+Source: vbump
+Section: devel
+Priority: optional
+Maintainer: Salvo 'LtWorf' Tomaselli <tiposchi@tiscali.it>
+Build-Depends: debhelper (>= 11), mypy
+Standards-Version: 4.1.4
+Homepage: https://github.com/ltworf/vbump
+X-Python3-Version: >= 3.6
+Vcs-Browser: https://github.com/ltworf/vbump
+
+Package: vbump
+Architecture: all
+Depends: ${misc:Depends}, ${python3:Depends}
+Description: This is a CLI (command line) for bumping versions on git
+ Just a simple command to bump a version and make a commit.
